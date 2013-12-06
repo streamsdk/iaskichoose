@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>72FA8D53-6B83-4012-8898-9D9D2C86E96D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Photo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>950F7C2D-3BF7-45A7-94BD-DFE9699073B7</key>
+		<string>https://github.com/yr1216/pvote.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Photo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>950F7C2D-3BF7-45A7-94BD-DFE9699073B7</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/yr1216/pvote.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>950F7C2D-3BF7-45A7-94BD-DFE9699073B7</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>950F7C2D-3BF7-45A7-94BD-DFE9699073B7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>pvote</string>
+		</dict>
+	</array>
+</dict>
+</plist>
