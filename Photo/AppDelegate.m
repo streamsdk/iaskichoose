@@ -51,7 +51,7 @@
     
     NSMutableArray *array=[[NSMutableArray alloc] initWithCapacity:0];
     
-    //add testing comments yr1216
+    //add testing comments yr1216 added
     UINavigationController *nav1=[[UINavigationController alloc] initWithRootViewController:mainVC];
     UINavigationController *nav2=[[UINavigationController alloc] initWithRootViewController:fireVC];
     UINavigationController *nav3=[[UINavigationController alloc] initWithRootViewController:photoVC];
