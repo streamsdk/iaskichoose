@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>F0704EA1-7706-4C70-8008-5C723624BA60</string>
+	<string>2EFB2BD4-9F61-4A44-B03A-F3DE8434232F</string>
 	<key>IDESourceControlProjectName</key>
 	<string>我问我选</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>83E2CF37-CD0F-4DBF-9CC4-CFCB90C5DFCC</key>
-		<string>https://github.com/yr1216/pvote.git</string>
+		<key>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</key>
+		<string>https://github.com/streamsdk/iaskichoose.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>我问我选.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>83E2CF37-CD0F-4DBF-9CC4-CFCB90C5DFCC</key>
+		<key>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/yr1216/pvote.git</string>
+	<string>https://github.com/streamsdk/iaskichoose.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>83E2CF37-CD0F-4DBF-9CC4-CFCB90C5DFCC</string>
+	<string>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>83E2CF37-CD0F-4DBF-9CC4-CFCB90C5DFCC</string>
+			<string>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</string>
 			<key>IDESourceControlWCCName</key>
-			<string>pvote</string>
+			<string>iaskichoose</string>
 		</dict>
 	</array>
 </dict>
