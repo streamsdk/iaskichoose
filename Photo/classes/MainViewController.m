@@ -664,13 +664,49 @@
     }
 
 }
+-(void) loadResultVotes:(UIButton *)button{
+    ImageCache *imageCache = [ImageCache sharedObject];
+    STreamQuery *sqq = [[STreamQuery alloc] initWithCategory:@"Voted"];
+    [sqq setQueryLogicAnd:FALSE];
+    NSString *objectId  = [[votesArray objectAtIndex:button.tag] objectId];
+    NSMutableArray * leftVoters= [[NSMutableArray alloc]init];
+    NSMutableArray * rightVoters= [[NSMutableArray alloc]init];
+    [sqq whereEqualsTo:objectId forValue:@"f1voted"];
+    [sqq whereEqualsTo:objectId forValue:@"f2voted"];
+     NSMutableArray *result = [sqq find];
+    if (result && [result count] > 0){
+        for (STreamObject *so in result){
+            NSString *vote = [so getValue:objectId];
+            if ([vote isEqualToString:@"f1voted"])
+                [leftVoters addObject:[so objectId]];
+            if ([vote isEqualToString:@"f2voted"])
+                [rightVoters addObject:[so objectId]];
+        }
+        int leftCount = [leftVoters count];
+        int rightCount = [rightVoters count];
+        
+        int total = [leftVoters count] + [rightVoters count];
+        
+        int vote1count = ((float)leftCount/total)*100;
+        int vote2count = ((float)rightCount/total)*100;
+        
+        NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+        NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+        VoteResults *vo = [[VoteResults alloc] init];
+        [vo setObjectId:[[votesArray objectAtIndex:button.tag] objectId]];
+        [vo setF1:vote1];
+        [vo setF2:vote2];
+        [imageCache addVotesResults:[[votesArray objectAtIndex:button.tag] objectId] withVoteResult:vo];
+    }
+    [self.myTableView reloadData];
 
+}
 -(void)voteTheTopicLeft:(UIButton *)button{
     
     STreamQuery *sq = [[STreamQuery alloc] initWithCategory:@"Voted"];
     ImageCache *cache = [ImageCache sharedObject];
     [sq addLimitId:[cache getLoginUserName]];
-    NSMutableArray *vote = [sq find];
+    NSMutableArray *vote = [sq find];//block
     if ([vote count] > 0){
         
         STreamObject *so = [vote objectAtIndex:0];
@@ -708,7 +744,9 @@
             
         }
     }
-    [self clickedButton:button];
+//    [self clickedButton:button];
+    [self loadResultVotes:button];
+    
 }
 
 -(void)buttonClickedLeft:(UIButton *)button withEvent:(UIEvent*)event {
@@ -773,7 +811,9 @@
         }
 
     }
-    [self clickedButton:button];
+
+//    [self clickedButton:button];
+    [self loadResultVotes:button];
 }
 
 -(void)buttonClickedRight:(UIButton *)button withEvent:(UIEvent*)event {
