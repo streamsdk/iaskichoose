@@ -5,19 +5,31 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>AD46CAA0-0F48-48C5-BECC-42B8F3635B1E</string>
+<<<<<<< HEAD
+	<string>2EFB2BD4-9F61-4A44-B03A-F3DE8434232F</string>
+=======
+	<string>920A542F-F072-4411-A707-3C6057A7517B</string>
+>>>>>>> 6ba1d12823fd508a11a4ef816ade37ab274d480a
 	<key>IDESourceControlProjectName</key>
 	<string>我问我选</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D1161E6D-7391-4006-9F41-8735CFDCD5E3</key>
+<<<<<<< HEAD
+		<key>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</key>
+=======
+		<key>C1963BCA-8419-44C6-89DC-CA82EAD3DE56</key>
+>>>>>>> 6ba1d12823fd508a11a4ef816ade37ab274d480a
 		<string>https://github.com/streamsdk/iaskichoose.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>我问我选.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D1161E6D-7391-4006-9F41-8735CFDCD5E3</key>
+<<<<<<< HEAD
+		<key>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</key>
+=======
+		<key>C1963BCA-8419-44C6-89DC-CA82EAD3DE56</key>
+>>>>>>> 6ba1d12823fd508a11a4ef816ade37ab274d480a
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +37,22 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D1161E6D-7391-4006-9F41-8735CFDCD5E3</string>
+<<<<<<< HEAD
+	<string>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</string>
+=======
+	<string>C1963BCA-8419-44C6-89DC-CA82EAD3DE56</string>
+>>>>>>> 6ba1d12823fd508a11a4ef816ade37ab274d480a
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D1161E6D-7391-4006-9F41-8735CFDCD5E3</string>
+<<<<<<< HEAD
+			<string>139401B0-3F9D-4DAF-82DD-11B5DBEC79AA</string>
+=======
+			<string>C1963BCA-8419-44C6-89DC-CA82EAD3DE56</string>
+>>>>>>> 6ba1d12823fd508a11a4ef816ade37ab274d480a
 			<key>IDESourceControlWCCName</key>
 			<string>iaskichoose</string>
 		</dict>
