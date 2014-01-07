@@ -161,7 +161,7 @@
     int days = hours / 24;
     if (days <= 30)
         return [NSString stringWithFormat:@"%d天前", days];
-    int months = days / 365;
+    int months = days / 12;
     if (months <= 12)
         return [NSString stringWithFormat:@"%d月前", months];
     

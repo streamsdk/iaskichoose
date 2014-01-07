@@ -109,6 +109,7 @@
         
         self.nameText = [[UITextField alloc]initWithFrame:CGRectMake(20, 140, self.view.frame.size.width - 40, 50)];
         self.nameText.placeholder = @"登录名";
+        self.nameText.keyboardType = UIKeyboardTypeASCIICapable;
         self.nameText.borderStyle = UITextBorderStyleRoundedRect;
         self.nameText.delegate = self;
         [cell.contentView addSubview:self.nameText];
