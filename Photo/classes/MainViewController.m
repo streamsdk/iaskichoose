@@ -236,12 +236,9 @@
             vote2count = ((float)f2/total)*100;
             NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
-            
-            [vo setObjectId:[allVotes objectId]];
-            //NSNumber *f1Count =[NSNumber numberWithInt:f1];
-            //NSNumber *f2Count =[NSNumber numberWithInt:f2];
             NSString *f1Count = [NSString stringWithFormat:@"%d",f1];
             NSString *f2Count = [NSString stringWithFormat:@"%d",f2];
+            [vo setObjectId:[allVotes objectId]];
             [vo setC1:f1Count];
             [vo setC2:f2Count];
             [vo setF1:vote1];
@@ -251,6 +248,16 @@
         }else{
             vote1count=0;
             vote2count=0;
+            NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+            NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+            NSString *f1Count = [NSString stringWithFormat:@"%d",f1];
+            NSString *f2Count = [NSString stringWithFormat:@"%d",f2];
+            [vo setObjectId:[allVotes objectId]];
+            [vo setC1:f1Count];
+            [vo setC2:f2Count];
+            [vo setF1:vote1];
+            [vo setF2:vote2];
+            [imageCache addVotesResults:[allVotes objectId] withVoteResult:vo];
         }
     }
 }
@@ -748,32 +755,29 @@
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
             NSString *c1 = [NSString stringWithFormat:@"%d",f1count];
             NSString *c2 = [NSString stringWithFormat:@"%d", f2count];
-            
             [vo setF1:vote1];
             [vo setF2:vote2];
             [vo setC1:c1];
             [vo setC2:c2];
-            
-            
             [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
-            
-            
         }else{
             vote1count=0;
             vote2count=0;
+            vo = [[VoteResults alloc]init];
+            NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+            NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+            NSString *c1 = [NSString stringWithFormat:@"%d",f1count];
+            NSString *c2 = [NSString stringWithFormat:@"%d", f2count];
+            [vo setF1:vote1];
+            [vo setF2:vote2];
+            [vo setC1:c1];
+            [vo setC2:c2];
+            [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
+
         }
         
-        
     }else{
-        vo = [[VoteResults alloc]init];
-        NSString *vote1 = @"100%";
-        NSString *vote2 = @"0%";
-        [vo setObjectId:[[votesArray objectAtIndex:button.tag]objectId]];
-        [vo setF1:vote1];
-        [vo setF2:vote2];
-        //[vo setF1count:[NSNumber numberWithInt:1]];
-        //[vo setF2count:[NSNumber numberWithInt:0]];
-        [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
+        
     }
     [self.myTableView reloadData];
 
