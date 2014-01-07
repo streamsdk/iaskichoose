@@ -8,7 +8,6 @@
 
 #import "ImageCache.h"
 #import <arcstreamsdk/STreamFile.h>
-#import "VoteResults.h"
 #import "FileCache.h"
 
 static NSMutableDictionary *_imageDictionary;

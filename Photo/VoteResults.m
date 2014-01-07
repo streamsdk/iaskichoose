@@ -14,5 +14,6 @@
 @synthesize f1;
 @synthesize f2;
 @synthesize userName;
-
+@synthesize f1count;
+@synthesize f2count;
 @end

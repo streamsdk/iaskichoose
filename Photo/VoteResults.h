@@ -17,6 +17,7 @@
 @property (retain,nonatomic)NSString *f1;
 @property (retain,nonatomic)NSString *f2;
 @property (retain,nonatomic)NSString *userName;
-
+@property(assign,nonatomic) int f1count;
+@property(assign,nonatomic) int f2count;
 
 @end

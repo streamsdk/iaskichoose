@@ -161,7 +161,7 @@
     int days = hours / 24;
     if (days <= 30)
         return [NSString stringWithFormat:@"%d天前", days];
-    int months = days / 365;
+    int months = days / 30;
     if (months <= 12)
         return [NSString stringWithFormat:@"%d月前", months];
     
@@ -238,9 +238,10 @@
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
             
             [vo setObjectId:[allVotes objectId]];
+            [vo setF1count:f1];
+            [vo setF2count:f2];
             [vo setF1:vote1];
             [vo setF2:vote2];
-            
             [imageCache addVotesResults:[allVotes objectId] withVoteResult:vo];
             
         }else{
@@ -664,91 +665,109 @@
     }
 
 }
--(void) loadResultVotes:(UIButton *)button{
-    ImageCache *imageCache = [ImageCache sharedObject];
-    STreamQuery *sqq = [[STreamQuery alloc] initWithCategory:@"Voted"];
-    [sqq setQueryLogicAnd:FALSE];
-    NSString *objectId  = [[votesArray objectAtIndex:button.tag] objectId];
-    NSMutableArray * leftVoters= [[NSMutableArray alloc]init];
-    NSMutableArray * rightVoters= [[NSMutableArray alloc]init];
-    [sqq whereEqualsTo:objectId forValue:@"f1voted"];
-    [sqq whereEqualsTo:objectId forValue:@"f2voted"];
-     NSMutableArray *result = [sqq find];
-    if (result && [result count] > 0){
-        for (STreamObject *so in result){
-            NSString *vote = [so getValue:objectId];
-            if ([vote isEqualToString:@"f1voted"])
-                [leftVoters addObject:[so objectId]];
-            if ([vote isEqualToString:@"f2voted"])
-                [rightVoters addObject:[so objectId]];
+-(void)voteTheTopicLeft:(UIButton *)button{
+    ImageCache *cache = [ImageCache sharedObject];
+
+    STreamQuery *sq = [[STreamQuery alloc] initWithCategory:@"Voted"];
+    [sq addLimitId:[cache getLoginUserName]];
+    [sq find:^(NSMutableArray * vote) {
+        if ([vote count] > 0){
+            
+            STreamObject *so = [vote objectAtIndex:0];
+            STreamObject *sorow = [votesArray objectAtIndex:button.tag];
+            NSString *votedKey = [so getValue:[sorow objectId]];
+            
+            if (votedKey == nil){
+                
+                //update category voted
+                [so addStaff:[sorow objectId] withObject:@"f1voted"];
+                [so updateInBackground];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
+                
+            }else if([votedKey isEqualToString:@"f1voted"]){
+                
+                //update category voted
+                [so removeKeyInBackground:[sorow objectId] forObjectId:[so objectId]];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults removeObjectForKey:[sorow objectId]];
+                
+            }else{
+                
+                //update category voted
+                [so removeKeyInBackground:[sorow objectId] forObjectId:[so objectId]];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [so addStaff:[sorow objectId] withObject:@"f1voted"];
+                [so updateInBackground];
+                error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
+                
+            }
         }
-        int leftCount = [leftVoters count];
-        int rightCount = [rightVoters count];
+
+    }];
+    [self votedResult:button];
+}
+-(void)votedResult:(UIButton *)button {
+    ImageCache *cache = [ImageCache sharedObject];
+    NSString *fileId = [[votesArray objectAtIndex:button.tag] objectId];
+    VoteResults * vo = [cache getResults:fileId];
+    if (vo) {
+        STreamObject *so = [loggedInUserVotesResults objectForKey:fileId];
+        NSString * voted = [so getValue:[[votesArray objectAtIndex:button.tag]objectId]];
+        int total;
+        if (voted!=nil && [voted isEqualToString:@"f1voted"]) {
+            vo.f1count = [vo f1count]-1;
+            total = vo.f1count+vo.f2count;
+            
+        }else if (voted!=nil && [voted isEqualToString:@"f2voted"]){
+            vo.f1count = [vo f1count]+1;
+            vo.f2count = vo.f2count-1;
+            total = vo.f1count+vo.f2count;
+            
+        }else{
+            vo.f1count = [vo f1count]+1;
+            total = vo.f1count+vo.f2count;
+        }
+        int vote1count;
+        int vote2count;
+        if (total) {
+            vote1count = ((float)vo.f1count/total)*100;
+            vote2count = ((float)vo.f2count/total)*100;
+            NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+            NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+            
+            [vo setF1:vote1];
+            [vo setF2:vote2];
+            [vo setF1count:vo.f1count];
+            [vo setF2count:vo.f2count];
+            [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
+            
+            
+        }else{
+            vote1count=0;
+            vote2count=0;
+        }
         
-        int total = [leftVoters count] + [rightVoters count];
         
-        int vote1count = ((float)leftCount/total)*100;
-        int vote2count = ((float)rightCount/total)*100;
-        
-        NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
-        NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
-        VoteResults *vo = [[VoteResults alloc] init];
-        [vo setObjectId:[[votesArray objectAtIndex:button.tag] objectId]];
+    }else{
+        vo = [[VoteResults alloc]init];
+        NSString *vote1 = @"100%";
+        NSString *vote2 = @"0%";
+        [vo setObjectId:[[votesArray objectAtIndex:button.tag]objectId]];
         [vo setF1:vote1];
         [vo setF2:vote2];
-        [imageCache addVotesResults:[[votesArray objectAtIndex:button.tag] objectId] withVoteResult:vo];
+        [vo setF1count:1];
+        [vo setF2count:0];
+        [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
     }
     [self.myTableView reloadData];
 
 }
--(void)voteTheTopicLeft:(UIButton *)button{
-    
-    STreamQuery *sq = [[STreamQuery alloc] initWithCategory:@"Voted"];
-    ImageCache *cache = [ImageCache sharedObject];
-    [sq addLimitId:[cache getLoginUserName]];
-    NSMutableArray *vote = [sq find];//block
-    if ([vote count] > 0){
-        
-        STreamObject *so = [vote objectAtIndex:0];
-        STreamObject *sorow = [votesArray objectAtIndex:button.tag];
-        NSString *votedKey = [so getValue:[sorow objectId]];
-        
-        if (votedKey == nil){
-            
-            //update category voted
-            [so addStaff:[sorow objectId] withObject:@"f1voted"];
-            [so update];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
-            
-        }else if([votedKey isEqualToString:@"f1voted"]){
-          
-            //update category voted
-            [so removeKey:[sorow objectId] forObjectId:[so objectId]];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults removeObjectForKey:[sorow objectId]];
-            
-        }else{
-            
-            //update category voted
-            [so removeKey:[sorow objectId] forObjectId:[so objectId]];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [so addStaff:[sorow objectId] withObject:@"f1voted"];
-            [so update];
-            error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
-            
-        }
-    }
-//    [self clickedButton:button];
-    [self loadResultVotes:button];
-    
-}
-
 -(void)buttonClickedLeft:(UIButton *)button withEvent:(UIEvent*)event {
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue]>=7.0) {
@@ -758,10 +777,11 @@
     ImageCache * cache = [[ImageCache alloc]init];
     if ([cache getLoginUserName]) {
         if (touch.tapCount == 2) {
-            MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            HUD.labelText = @"投票中...";
-            [self.view addSubview:HUD];
-            [HUD showWhileExecuting:@selector(voteTheTopicLeft:) onTarget:self withObject:button animated:YES];
+            [self voteTheTopicLeft:button];
+//            MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.view];
+//            HUD.labelText = @"投票中...";
+//            [self.view addSubview:HUD];
+//            [HUD showWhileExecuting:@selector(voteTheTopicLeft:) onTarget:self withObject:button animated:YES];
         }
     }else{
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您还没有登录，请先登录" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"登录", nil];
@@ -774,46 +794,46 @@
     STreamQuery *sq = [[STreamQuery alloc] initWithCategory:@"Voted"];
     ImageCache *cache = [ImageCache sharedObject];
     [sq addLimitId:[cache getLoginUserName]];
-    NSMutableArray *vote = [sq find];
-    if ([vote count] > 0){
-        
-        STreamObject *so = [vote objectAtIndex:0];
-        STreamObject *sorow = [votesArray objectAtIndex:button.tag];
-        NSString *votedKey = [so getValue:[sorow objectId]];
-        
-        if (votedKey == nil){
-            //update category voted
-            [so addStaff:[sorow objectId] withObject:@"f2voted"];
-            [so update];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
-        }
-        
-        else if([votedKey isEqualToString:@"f2voted"]){
-            //update category voted
-            [so removeKey:[sorow objectId] forObjectId:[so objectId]];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults removeObjectForKey:[sorow objectId]];
+    [sq find:^(NSMutableArray * vote) {
+        if ([vote count] > 0){
             
-        }else{
+            STreamObject *so = [vote objectAtIndex:0];
+            STreamObject *sorow = [votesArray objectAtIndex:button.tag];
+            NSString *votedKey = [so getValue:[sorow objectId]];
             
-            //update category voted
-            [so removeKey:[sorow objectId] forObjectId:[so objectId]];
-            NSString *error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [so addStaff:[sorow objectId] withObject:@"f2voted"];
-            [so update];
-            error = [so errorMessage];
-            NSLog(@"error: %@", error);
-            [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
+            if (votedKey == nil){
+                //update category voted
+                [so addStaff:[sorow objectId] withObject:@"f2voted"];
+                [so updateInBackground];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
+            }
+            
+            else if([votedKey isEqualToString:@"f2voted"]){
+                //update category voted
+                [so removeKeyInBackground:[sorow objectId] forObjectId:[so objectId]];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults removeObjectForKey:[sorow objectId]];
+                
+            }else{
+                
+                //update category voted
+                [so removeKeyInBackground:[sorow objectId] forObjectId:[so objectId]];
+                NSString *error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [so addStaff:[sorow objectId] withObject:@"f2voted"];
+                [so updateInBackground];
+                error = [so errorMessage];
+                NSLog(@"error: %@", error);
+                [loggedInUserVotesResults setObject:so forKey:[sorow objectId]];
+            }
+            
         }
 
-    }
-
-//    [self clickedButton:button];
-    [self loadResultVotes:button];
+    }];
+    [self votedResult:button];
 }
 
 -(void)buttonClickedRight:(UIButton *)button withEvent:(UIEvent*)event {
@@ -824,10 +844,11 @@
     ImageCache * cache = [ImageCache sharedObject];
     if ([cache getLoginUserName]) {
         if (touch.tapCount == 2) {
-            MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            HUD.labelText = @"投票中...";
-            [self.view addSubview:HUD];
-            [HUD showWhileExecuting:@selector(voteTheTopicRight:) onTarget:self withObject:button animated:YES];
+            [self voteTheTopicRight:button];
+//            MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.view];
+//            HUD.labelText = @"投票中...";
+//            [self.view addSubview:HUD];
+//            [HUD showWhileExecuting:@selector(voteTheTopicRight:) onTarget:self withObject:button animated:YES];
         }
 
     }else{
