@@ -238,8 +238,12 @@
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
             
             [vo setObjectId:[allVotes objectId]];
-            [vo setF1count:f1];
-            [vo setF2count:f2];
+            //NSNumber *f1Count =[NSNumber numberWithInt:f1];
+            //NSNumber *f2Count =[NSNumber numberWithInt:f2];
+            NSString *f1Count = [NSString stringWithFormat:@"%d",f1];
+            NSString *f2Count = [NSString stringWithFormat:@"%d",f2];
+            [vo setC1:f1Count];
+            [vo setC2:f2Count];
             [vo setF1:vote1];
             [vo setF2:vote2];
             [imageCache addVotesResults:[allVotes objectId] withVoteResult:vo];
@@ -717,34 +721,40 @@
     NSString *fileId = [[votesArray objectAtIndex:button.tag] objectId];
     VoteResults * vo = [cache getResults:fileId];
     if (vo) {
+        int f1count = [[vo c1] intValue];
+        int f2count = [[vo c2] intValue];
         STreamObject *so = [loggedInUserVotesResults objectForKey:fileId];
         NSString * voted = [so getValue:[[votesArray objectAtIndex:button.tag]objectId]];
         int total;
         if (voted!=nil && [voted isEqualToString:@"f1voted"]) {
-            vo.f1count = [vo f1count]-1;
-            total = vo.f1count+vo.f2count;
+            f1count = f1count-1;
+            total = f1count + f2count;
             
         }else if (voted!=nil && [voted isEqualToString:@"f2voted"]){
-            vo.f1count = [vo f1count]+1;
-            vo.f2count = vo.f2count-1;
-            total = vo.f1count+vo.f2count;
+            f1count = f1count + 1;
+            f2count = f2count-1;
+            total =  f1count+ f2count;
             
         }else{
-            vo.f1count = [vo f1count]+1;
-            total = vo.f1count+vo.f2count;
+            f1count = f1count+1;
+            total =  f1count+ f2count;
         }
         int vote1count;
         int vote2count;
         if (total) {
-            vote1count = ((float)vo.f1count/total)*100;
-            vote2count = ((float)vo.f2count/total)*100;
+            vote1count = ((float) f1count/total)*100;
+            vote2count = ((float) f2count/total)*100;
             NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+            //NSString *f1Count = [NSString stringWithFormat:@"%d%%",f1];
+            //NSString *f2Count = [NSString stringWithFormat:@"%d%%",f2];
             
             [vo setF1:vote1];
             [vo setF2:vote2];
-            [vo setF1count:vo.f1count];
-            [vo setF2count:vo.f2count];
+          //  [vo setF1count:[NSNumber numberWithInt:f1count]];
+           // [vo setF2count:[NSNumber numberWithInt:f2count]];
+           
+            
             [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
             
             
@@ -761,8 +771,8 @@
         [vo setObjectId:[[votesArray objectAtIndex:button.tag]objectId]];
         [vo setF1:vote1];
         [vo setF2:vote2];
-        [vo setF1count:1];
-        [vo setF2count:0];
+       // [vo setF1count:[NSNumber numberWithInt:1]];
+       // [vo setF2count:[NSNumber numberWithInt:0]];
         [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
     }
     [self.myTableView reloadData];
