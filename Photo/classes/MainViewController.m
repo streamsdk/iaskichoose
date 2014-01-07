@@ -544,9 +544,9 @@
         NSString *timeDiff = [self getTimeDiff:diff];
         NSString *message = [so getValue:@"message"];
         self.message.text = message;
-        [self displayVoteResults:so timeDiff:timeDiff];
         [self downloadDoubleImage:so];
         [self loadUserMetadataAndDownloadUserProfileImage:so];
+        [self displayVoteResults:so timeDiff:timeDiff];
     }
     return cell;
 }
@@ -721,9 +721,9 @@
         }
 
     }];
-    [self votedResult:button];
+    [self votedResult:button withF1F2:@"left"];
 }
--(void)votedResult:(UIButton *)button {
+-(void)votedResult:(UIButton *)button withF1F2:(NSString *)string {
     ImageCache *cache = [ImageCache sharedObject];
     NSString *fileId = [[votesArray objectAtIndex:button.tag] objectId];
     VoteResults * vo = [cache getResults:fileId];
@@ -743,7 +743,10 @@
             total =  f1count+ f2count;
             
         }else{
-            f1count = f1count+1;
+            if([string isEqualToString:@"left"])
+                f1count = f1count+1;
+            if ([string isEqualToString:@"right"])
+                f2count = f2count +1;
             total =  f1count+ f2count;
         }
         int vote1count;
@@ -760,6 +763,7 @@
             [vo setC1:c1];
             [vo setC2:c2];
             [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
+            [self.myTableView reloadData];
         }else{
             vote1count=0;
             vote2count=0;
@@ -777,7 +781,25 @@
         }
         
     }else{
-        
+        int  f1count=0;
+        int  f2count=0;
+        int total;
+        if([string isEqualToString:@"left"])
+            f1count = 1;
+        if ([string isEqualToString:@"right"])
+            f2count = 1;
+        total =  f1count+ f2count;
+       int  vote1count = ((float) f1count/total)*100;
+       int  vote2count = ((float) f2count/total)*100;
+        NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+        NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+        NSString *c1 = [NSString stringWithFormat:@"%d",f1count];
+        NSString *c2 = [NSString stringWithFormat:@"%d", f2count];
+        [vo setF1:vote1];
+        [vo setF2:vote2];
+        [vo setC1:c1];
+        [vo setC2:c2];
+        [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
     }
     [self.myTableView reloadData];
 
@@ -845,9 +867,9 @@
             }
             
         }
-
+        [self.myTableView reloadData];
     }];
-    [self votedResult:button];
+    [self votedResult:button withF1F2:@"right"];
 }
 
 -(void)buttonClickedRight:(UIButton *)button withEvent:(UIEvent*)event {
