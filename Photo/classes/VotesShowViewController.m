@@ -81,7 +81,6 @@
 }
 - (void)loadVotes{
 
-    ImageCache*imageCache = [ImageCache sharedObject];
     STreamQuery *sqq = [[STreamQuery alloc] initWithCategory:@"Voted"];
     [sqq setQueryLogicAnd:FALSE];
     NSString *objectId  = [rowObject objectId];
@@ -97,21 +96,21 @@
             if ([vote isEqualToString:@"f2voted"])
                 [rightVoters addObject:[so objectId]];
         }
-        int leftCount = [leftVoters count];
-        int rightCount = [rightVoters count];
-        
-        int total = [leftVoters count] + [rightVoters count];
-        
-        vote1count = ((float)leftCount/total)*100;
-        vote2count = ((float)rightCount/total)*100;
-        
-        NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
-        NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
-        VoteResults *vo = [[VoteResults alloc] init];
-        [vo setObjectId:[rowObject objectId]];
-        [vo setF1:vote1];
-        [vo setF2:vote2];
-        [imageCache addVotesResults:[rowObject objectId] withVoteResult:vo];
+//        int leftCount = [leftVoters count];
+//        int rightCount = [rightVoters count];
+//        
+//        int total = [leftVoters count] + [rightVoters count];
+//        
+//        vote1count = ((float)leftCount/total)*100;
+//        vote2count = ((float)rightCount/total)*100;
+//        
+//        NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
+//        NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
+//        VoteResults *vo = [[VoteResults alloc] init];
+//        [vo setObjectId:[rowObject objectId]];
+//        [vo setF1:vote1];
+//        [vo setF2:vote2];
+//        [imageCache addVotesResults:[rowObject objectId] withVoteResult:vo];
     }
 }
 - (void)didReceiveMemoryWarning
@@ -235,9 +234,24 @@
         [self createUIControls:cell withCellRowAtIndextPath:indexPath];
     }
     ImageCache *cache = [ImageCache sharedObject];
+    
+    VoteResults *vo = [cache getResults:[rowObject objectId]];
+    if (vo){
+        self.vote1Lable.text = [vo f1];
+        self.vote2Lable.text = [vo f2];
+    }else{
+        self.vote1Lable.text = @"0%";
+        self.vote2Lable.text = @"0%";
+    }
+    if ([[vo f1] intValue]>= 50) {
+        self.vote1Lable.textColor = [UIColor greenColor];
+    }
+    if ([[vo f2] intValue] >= 50) {
+        self.vote2Lable.textColor = [UIColor greenColor];
+    }
 
-    self.vote1Lable.text=[NSString stringWithFormat:@"%d%%",vote1count];
-    self.vote2Lable.text=[NSString stringWithFormat:@"%d%%",vote2count];
+//    self.vote1Lable.text=[NSString stringWithFormat:@"%d%%",vote1count];
+//    self.vote2Lable.text=[NSString stringWithFormat:@"%d%%",vote2count];
     
     if (indexPath.row != 0) {
         if ([leftVoters count]!=0 && [leftVoters count] - 1 >= (indexPath.row - 1)){

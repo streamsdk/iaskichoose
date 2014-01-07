@@ -17,7 +17,6 @@
 @property (retain,nonatomic)NSString *f1;
 @property (retain,nonatomic)NSString *f2;
 @property (retain,nonatomic)NSString *userName;
-@property (retain,nonatomic)NSString *c1;
-@property (retain,nonatomic)NSString *c2;
+
 
 @end

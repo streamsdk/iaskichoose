@@ -14,6 +14,5 @@
 @synthesize f1;
 @synthesize f2;
 @synthesize userName;
-@synthesize c1;
-@synthesize c2;
+
 @end
