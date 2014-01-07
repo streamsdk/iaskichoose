@@ -161,7 +161,7 @@
     int days = hours / 24;
     if (days <= 30)
         return [NSString stringWithFormat:@"%d天前", days];
-    int months = days / 12;
+    int months = days / 30;
     if (months <= 12)
         return [NSString stringWithFormat:@"%d月前", months];
     
@@ -265,7 +265,7 @@
         STreamQuery *sq = [[STreamQuery alloc] initWithCategory:@"AllVotes"];
         NSDate *now = [[NSDate alloc] init];
         long millionsSecs = [now timeIntervalSince1970];
-        long dayBefore = millionsSecs - (3600 *150*timeCount);
+        long dayBefore = millionsSecs - (3600 *450*timeCount);
         
         NSDate *dayBe = [[NSDate alloc] initWithTimeIntervalSince1970:dayBefore];
         [sq setQueryLogicAnd:true];
