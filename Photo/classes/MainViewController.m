@@ -746,14 +746,14 @@
             vote2count = ((float) f2count/total)*100;
             NSString *vote1 = [NSString stringWithFormat:@"%d%%",vote1count];
             NSString *vote2 = [NSString stringWithFormat:@"%d%%",vote2count];
-            //NSString *f1Count = [NSString stringWithFormat:@"%d%%",f1];
-            //NSString *f2Count = [NSString stringWithFormat:@"%d%%",f2];
+            NSString *c1 = [NSString stringWithFormat:@"%d",f1count];
+            NSString *c2 = [NSString stringWithFormat:@"%d", f2count];
             
             [vo setF1:vote1];
             [vo setF2:vote2];
-          //  [vo setF1count:[NSNumber numberWithInt:f1count]];
-           // [vo setF2count:[NSNumber numberWithInt:f2count]];
-           
+            [vo setC1:c1];
+            [vo setC2:c2];
+            
             
             [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
             
@@ -771,8 +771,8 @@
         [vo setObjectId:[[votesArray objectAtIndex:button.tag]objectId]];
         [vo setF1:vote1];
         [vo setF2:vote2];
-       // [vo setF1count:[NSNumber numberWithInt:1]];
-       // [vo setF2count:[NSNumber numberWithInt:0]];
+        //[vo setF1count:[NSNumber numberWithInt:1]];
+        //[vo setF2count:[NSNumber numberWithInt:0]];
         [cache addVotesResults:[[votesArray objectAtIndex:button.tag]objectId] withVoteResult:vo];
     }
     [self.myTableView reloadData];
